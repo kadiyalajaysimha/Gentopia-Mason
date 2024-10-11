@@ -1,0 +1,929 @@
+INFO:root:Creating Config from file: ./gentpool/pool/scholarAgentWithSearch/agent.yaml
+INFO:root:Starting to load configuration from ./gentpool/pool/scholarAgentWithSearch/agent.yaml
+INFO:root:Successfully loaded configuration from ./gentpool/pool/scholarAgentWithSearch/agent.yaml
+INFO:root:--------------------
+INFO:root:[green]Welcome to Gentopia!
+INFO:root:--------------------
+INFO:root:[green]User: 
+INFO:root:scholarAgentWithSearch is thinking...
+INFO:root:Done
+INFO:root:[blue]scholarAgentWithSearch: 
+INFO:root:{"name":"pdf_read", "arguments":{"pdf_url":"http://www.columbia.edu/~on2110/Papers/HartmannNetzer2023.pdf"}}
+
+INFO:root:Calling function: pdf_read ...
+INFO:root:Done
+INFO:root:--------------------
+INFO:root:NATURAL LANGUAGE
+PROCESSING IN MARKETING
+Jochen Hartmann and Oded Netzer
+ABSTRACT
+The increasing importance and proliferation of text data provide a unique
+opportunity and novel lens to study human communication across a myriad ofbusiness and marketing applications. For example, consumers compare andreview products online, individuals interact with their voice assistants tosearch, shop, and express their needs, investors seek to extract signals fromﬁrms ’press releases to improve their investment decisions, and ﬁrms analyze
+sales call transcripts to increase customer satisfaction and conversions.However, extracting meaningful information from unstructured text data is anontrivial task. In this chapter, we review established natural language pro-
+cessing (NLP) methods for traditional tasks (e.g., LDA for topic modeling
+and lexicons for sentiment analysis and writing style extraction) and providean outlook into the future of NLP in marketing, covering recentembedding-based approaches, pretrained language models, and transferlearning for novel tasks such as automated text generation and multi-modalrepresentation learning. These emerging approaches allow the ﬁeld to improve
+its ability to perform certain tasks that we have been using for more than adecade (e.g., text classi ﬁcation). But more importantly, they unlock entirely
+new types of tasks that bring about novel research opportunities (e.g., textsummarization, and generative question answering). We conclude with aroadmap and research agenda for promising NLP applications in marketing
+and provide supplementary code examples to help interested scholars to
+explore opportunities related to NLP in marketing.
+Keywords : Natural language processing; text mining; text analytics; deep
+learning; topic modeling; sentiment analysis; word embeddings; language
+models; transformers; computational linguistics
+Artiﬁcial Intelligence in Marketing
+Review of Marketing Research, Volume 20, 191 –215
+Copyright © 2023 Jochen Hartmann and Oded NetzerPublished under exclusive licence by Emerald Publishing LimitedISSN: 1548-6435/doi: 10.1108/S1548-643520230000020011
+1911. INTRODUCTION
+The availability of and ability to extract meaningful information from unstruc-
+tured data (e.g., image, video, voice, and text) continues to rise and has attractedmuch interest in the marketing community (e.g., Balducci & Marinova, 2018 ;
+Grewal, Gupta, & Hamilton, 2021 ). As a result, there are numerous applications
+leveraging unstructured data in marketing, ranging from assessing the effective-ness of marketing video content ( Liu, Shi, Teixeira, & Wedel, 2018 ), automati-
+cally generating SEO content ( Reisenbichler, Reutterer, Schweidel, & Dan, 2022 )
+and wine reviews ( Carlson, Kopalle, Riddell, Rockmore, & Vana, 2022 ), to
+analyzing the success of multimodal branded social media content ( Hartmann,
+Heitmann, Schamp, & Netzer, 2021 ).
+Among the unstructured data types, text has been the most frequently
+analyzed modality in marketing to date, presumably due to the relatively higheraccessibility of textual data compared to images, voice, and video, and therelative approachability of numerous text mining methods. While the ﬁrst
+applications of modern natural language processing (NLP) in marketingappeared at the end of the ﬁrst and start of the second decade of the new mil-
+lennium (e.g., Eliashberg, Hui, & Zhang, 2007 ;Lee & Bradlow, 2011 ;Netzer,
+Feldman, Goldenberg, & Fresko, 2012 ), the development of NLP tools for
+content analysis dates back to the 1960s (e.g., Stone, 1966 ). However, the
+automatic extraction of information from textual data did not gain popularity
+until the late 1990s (see Humphreys, 2019 for a historical review).
+Applications of NLP outside of marketing are broad and range from the
+prediction of election outcomes ( Bovet, Morone, & Makse, 2018 ) and disease
+spread ( Yang, Santillana, & Kou, 2015 ) to monitoring public wellbeing from
+user-generated social media data ( Jaidka et al., 2020 ) and tracking social ste-
+reotypes over time ( Charlesworth, Caliskan, & Banaji, 2022 ). Deep learning has
+been particularly helpful in analyzing these types of unstructured data ( LeCun,
+Bengio, & Hinton, 2015 ;Sejnowski, 2020 ).
+In this chapter, we review established NLP methods for traditional tasks (e.g.,
+LDA for topic modeling and lexicons for sentiment analysis) and provide an
+outlook on the future of NLP in marketing, covering recent embedding-based
+approaches for novel tasks such as automated text generation and multimodalrepresentation learning. We elaborate on the opportunity provided by the richinformation embedded in textual information and argue that –while the
+excitement about new modes of unstructured data such as images or videos isunderstandable ( Grewal et al., 2021 )–NLP applications in marketing are here to
+stay. The opportunity is still vast and with the additional development ofmethods to extract meaningful information from textual data, additional appli-cations will arise, leading to a second “NLP spring ”in marketing.
+While previous reviews of textual analysis in marketing primarily focused on
+the application of textual analysis, uniting the tribes of the marketing ﬁeld
+(Berger, Humphreys, et al., 2020 ;Humphreys & Wang, 2018 ), our unique focus
+in this chapter is on the exciting and novel methods in the ﬁeld and the oppor-
+tunity they pose for emerging applications in marketing. The chapter is structured192 JOCHEN HARTMANN AND ODED NETZERas follows. First, we discuss the dual role of language, either revealing informa-
+tion about the producer or affecting the recipient ( Berger, Humphreys, et al.,
+2020). In this context, we also discuss the role of text in subsequent analyses,
+either acting as the independent or dependent variable in the investigation of
+marketing phenomena, and address the importance of leveraging text to studycausal effects. Second, we review the current state of NLP, focusing on estab-lished methods for established tasks like concept and topic extraction or senti-ment and writing style extraction. Third, we provide an outlook on the future,enabled by emerging methods like embedding-based approaches, pretrainedlanguage models, and transfer learning. We discuss the opportunities fromleveraging both static and contextual embeddings, whose main strengths lie intheir ability to model the relationship across words and sentences and tounderstand the meaning of words in the context in which the appear. Theseemerging approaches allow the ﬁeld to improve its ability to perform certain tasks
+that we have been using for more than a decade (e.g., text classi ﬁcation). But
+more importantly, they open the opportunity to perform entirely new types oftasks that bring about novel research opportunities (e.g., text generation, textsummarization, question answering). We provide code examples for several of thenew tasks to facilitate their application in marketing.
+1We conclude with a
+roadmap and research agenda for promising NLP applications in marketing.
+2. THE ROLE OF TEXT IN MARKETING
+2.1 The Dual Role of Language
+Understanding the dual role of language is crucial when working with textual
+data. Text can re ﬂect information about the producer (e.g., a social media user
+posting or commenting on Twitter) or affect the recipients (e.g., investors reactingtoﬁrms ’press releases). Consumers, ﬁrms, investors, institutions/society can act
+both as text receivers or producers in different constellations (see Berger, Hum-
+phreys, et al., 2020 for a comprehensive summary of the dual role of language).
+Marketing scholars have explored text production and what it reveals about
+the writer of the text in various contexts. Netzer, Lemaire, and Herzenstein (2019)
+investigate what the text may signal about the borrower of a loan and their
+likelihood of defaulting on their loan. Chung, Johar, Li, Netzer, and Pearson
+(2022) extract from textual data the motivation of people to engage in the sharing
+economy. Hartmann et al. (2021) infer expressed purchase intentions from
+unstructured social media comments. On the other hand, other studies havedirectly focused on how language affects the reader. For example, Toubia,
+Berger, and Eliashberg (2021) assess how narrative arc in movies or academic
+papers affects their success. All these studies have in common, which is oftenunique to NLP applications in marketing, that they not only extract meaningfulconstructs from the textual data but also seek to relate them to relevant mar-keting, business, or societal outcomes.Natural Language Processing in Marketing 1932.2 Text as Independent Variables
+In terms of its role in marketing applications, text is most frequently used as
+independent variables. That is, text features are used to predict or explain someoutcome variable of interest. For example, Berger and Milkman (2012) predict the
+virality of news articles based on the emotion conveyed by the texts. Packard and
+Berger (2021) analyze how the concreteness of language shapes customer satis-
+faction. Rocklage, Rucker, and Nordgren (2021) predict marketplace success
+based on mass-scale emotionality. Tirunillai and Tellis (2012) relate
+user-generated content to abnormal returns on stock markets. Liu, Lee, and Sri-
+nivasan (2019) analyze the effect of consumer review content on sales conversion.
+In econometric analyses, text is often combined with nontextual data. Non-
+textual data can be the focal variable that the researcher is trying to predict orunderstand (e.g., sales or stock prices), they may be predictors that the researcherincludes in addition to the text variables in the model, or they can be data that areused to validate the textual approach. Nontextual data may be fully external tothe textual data or may include quanti ﬁable summaries of the textual information
+such as the average document length.
+2.3 Text as the Dependent Variable
+While NLP methods have predominantly been used to generate independent
+variables, few studies extract the outcome variable of interest from text. Melu-
+mad, Inman, and Pham (2019) explore how smartphone use changes the linguistic
+characteristics of user-generated content. Woolley and Sharif (2021) study how
+incentives increase the relative positivity of review content. Hartmann et al.
+(2021) train a text classi ﬁer to identify expressed purchase intentions in
+user-generated social media comments.
+The opportunity to extract strong marketing-relevant dependent variables
+from textual data can increase the potential impact of marketing research. One ofthe reasons for limited research using dependent variables extracted from text isthat such extracted outcomes tend to be a noisy measure of the true outcome dueto possible limited accuracy of the extraction method. As NLP tools advance, the
+extraction of such variables will become more accurate. We believe there is an
+opportunity for the ﬁeld to look for outcomes that may be hidden in unstructured
+data.
+2.4 Establishing Causality
+NLP methods are often used in the context of observational data and, due to
+textual data ’s high dimensionality, often involve machine learning in the
+extraction phase. This has likely led to the perception that NLP methods areprimarily suitable for descriptive or predictive tasks. However, marketers areoften interested in causal effects ( Goldfarb, Tucker, & Wang, 2022 ). If the data
+come from a randomized controlled trial experiment, or if one can use causalmethodology for observational studies like instrumental variables, or regressiondiscontinuity, causal inference is possible, and researchers can use such textual194 JOCHEN HARTMANN AND ODED NETZERdata to test social science theories ( Egami, Fong, Grimmer, Roberts, & Stewart,
+2018). Noteworthy examples of studies that have leveraged text to draw causal
+conclusions include Puranam, Narayan, and Kadiyali (2017) , who use a
+difference-in-difference estimation approach to study the causal effect of calorie
+posting regulation on the proportion of health-related discussions in consumerreviews. Simonov and Rao (2022) estimate a structural model of demand for
+news. Puranam, Kadiyali, and Narayan (2021) exploit a natural experiment to
+estimate the causal effect of minimum wages on consumer perceptions of service.An emerging area of research in computer science and statistics focuses on causaleffects using text data (e.g., Keith, Jensen, & O ’Connor, 2020 ;Veitch, Sridhar, &
+Blei, 2020 ). We expect that these advances will percolate also into the marketing
+ﬁeld.
+3. THE CURRENT STATE OF NLP IN MARKETING
+The current use of NLP methods in marketing can be classi ﬁed into three cate-
+gories based on the level and type of information that the researcher is trying toextract from the text: These are concept and topic extraction, relationship
+extraction, and sentiment and writing style extraction .Table 1 describes the
+methods available to extract the corresponding three information types and
+examples of their application in marketing.
+3.1 Concept and Topic Extraction
+The objective of concept and topic extraction is to identify single words, n-grams,
+or entire topics in text. For many marketing applications, it is required to identifycertain concepts that are the focus of the analysis, e.g., brand names for brandbuzz monitoring ( Klostermann, Plumeyer, B ¨oger, & Decker, 2019 ) or for social
+listening ( Liu et al., 2019 ;Netzer et al., 2012 ). A related task in NLP is commonly
+known as named entity extraction (NER), which can be used to identify orga-nizations, people, or locations. Among the most popular methods of NER is theStanford Named Entity recognizer ( Finkel, Grenager, & Manning, 2005 ) and the
+more advanced InferNER approach ( Shahzad, Amin, Esteves, & Ngomo, 2021 ).
+Moving from words to topics, unsupervised topic models such as LDA ( Blei,
+Ng, & Jordan, 2003 ) have been employed across a wide variety of contexts for
+topic extraction. Among the ﬁrst applications of LDA in marketing is by Tir-
+unillai and Tellis (2014) , who employ LDA to enable strategic brand analysis
+from user-generated content. LDA has also been used to extract brand-relevantinformation from social tags ( Nam, Joshi, & Kannan, 2017 ), content of loan
+application requests ( Netzer et al., 2019 ), and the practical relevance of mar-
+keting articles ( Jedidi, Schmitt, Ben Sliman, & Li, 2021 ).
+Several extensions to the traditional LDA have been proposed. Toubia,
+Iyengar, Bunnell, and Lemaire (2019) use a seeded LDA to extract psychological
+themes from entertainment products. B¨uschken and Allenby (2016) extend the
+traditional LDA approach to construct a sentence-based LDA that avoids theNatural Language Processing in Marketing 195bag-of-word approach assumption, in which the word order of the original tex-
+tual unit is not maintained. Liu and Toubia (2018) extend the traditional LDA to
+a hierarchical LDA that combines the short text in the search query with thelonger text of the search page results.Table 1. Established and Novel Text Analysis Tools in Marketing.
+Established Tools Marketing
+ExamplesNovel Tools Marketing
+Examples
+Established tasks
+Concept and
+topicextractionTraditional machinelearning methods (e.g.,na¨ıve Bayes, support vec-
+tor machines)
+Stanford NERLatent Semantic AnalysisLatent DirichletAllocation
+Poisson FactorizationNetzeret al.(2019)
+Tirunillai
+and Tellis
+(2014)Toubiaet al.(2019)Deep contextuallanguage models(e.g., RoBERTa)
+InferNERBERTopicEmbedded TopicModel (ETM)
+Supervised DeepTopic Modeling(sDTM)
+Supervised Hier-archical DirichletProcess (SHDP)Puranamet al. (2021)
+Hartmannet al. (2021)
+Boughanmiand Ansari(2021)
+Yang, Zhang,and Fan(2022)
+Relationship
+extractionWord co-occurencesSimLex-999Handwritten rulesWordNetStanford ParserNetzeret al.(2012) Static embeddings(e.g., word2vec,GloVe)
+Contextual
+embeddings (e.g.,
+BERT-based,SentenceBERT)Timoshenkoand Hauser(2019)
+Toubia et al.
+(2021)
+Sentiment and
+writing styleextractionDictionaries (e.g., Evalu-ative Lexicon 2.0)
+General-purpose (e.g.,
+LIWC) and specialized
+sentiment dictionaries(e.g., VADER)
+Traditional machinelearning methodsBergerand Milk-man
+(2012)
+Villarroel
+Ordeneset al.(2019)Dictionaries(automated; e.g.,Wordify)
+Aspect-basedsentiment analysis(ABSA)
+Domain-adaptedlanguage models(e.g., SiEBERT)
+BART-NLI andSetFit for few andzero-shot learningHovy, Melu-mad, andInman (2021)
+Chakrabortyet al. (2022)
+Hartmannet al. (2022)
+Novel tasks
+Text
+generation––ChatGPT, GPT-3Plug & Play LM
+(PPLM)LSTMReisenbichler
+et al. (2022)Carlson et al.(2022)
+Text
+summarization––Sequence-to-
+sequence models(e.g., BART, T5)–
+Multimodal
+representation
+learning–– CLIPCustom multi-
+modal networkarchitecturesDew, Ansari,
+and Toubia
+(2022)196 JOCHEN HARTMANN AND ODED NETZERAn alternative approach to topic modeling is based on Poisson factorization
+(Gopalan, Hofman, & Blei, 2013 ). Poisson factorization has several advantages
+relative to the LDA approach. First, Poisson factorization is better suited for
+sparse and short textual responses ( Canny, 2004 ). Second, unlike LDA, Poisson
+factorization does not assume that the distribution of topics in a document sumsup to 1. Hence, some documents can include more topics than others. Severalrecent marketing papers have used Poisson factorization for topic modeling (e.g.,Chung et al., 2022 ;Liu, Toubia, & Hill, 2021 ;Toubia et al., 2021 ).
+3.2 Relationship Extraction
+Relationship extraction seeks to extract and identify relationships among words
+and entities. At the most basic level, relationship extraction can be captured bythe mere co-occurrence of words. For example, to create market maps leveragingco-occurrences of brands ( Netzer et al., 2012 ).Toubia and Netzer (2017) assess
+the creativity of ideas using semantic subnetworks of the words or concepts in theidea. Boghrati and Berger (2019) analyze misogyny in song lyrics by assessing
+how different traits (e.g., competence) are related to men and women. To extract
+more complex relationships like customer needs ( Timoshenko & Hauser, 2019 )o r
+social media adverse drug reactions ( Feldman, Netzer, Peretz, & Rosenfeld,
+2015), one needs to go beyond mere co-occurrence and bag-of-words approaches.
+While the opportunities for relationship extraction in marketing are vast, their
+application to date has been limited, possibly due to the relative complexityinvolved in capturing such relationships and assessing semantic similarity. This islikely to change with the rise and increasing accessibility of embedding-basedmethods, which we discuss later in this chapter.
+3.3 Sentiment and Writing Style Extraction
+Lexicons such as the Linguistic Inquiry and Word Count (LIWC; Pennebaker,
+Boyd, Jordan, & Blackburn, 2015 ), VADER ( Hutto & Gilbert, 2014 ), and the
+Evaluative Lexicon 2.0 ( Rocklage, Rucker, & Nordgren, 2018 ) have been a
+prevalent choice for marketing researchers for sentiment and writing styleextraction ( Hartmann, Huppertz, Schamp, & Heitmann, 2019 ). TextAnalyzer
+(http://textanalyzer.org/ ) summarizes multiple lexicons ( Berger, Sherman, &
+Ungar, 2020 ). To quantify the information conveyed by a document, the docu-
+ment ’s words are compared to the word lists contained in the lexicon. LIWC has
+been used in numerous marketing articles (e.g., Berger & Milkman, 2012 ;
+Hartmann et al., 2021 ;Netzer et al., 2019 ) to capture the effect of writing styles
+on different behavioral outcomes. Simple word lists can allow users to measurespeci ﬁc text dimensions like the number of personal pronouns ( Packard & Berger,
+2020) or more nuanced dimensions such as text concreteness ( Brysbaert,
+Warriner, & Kuperman, 2014 ) or authenticity (Pennebaker et al., 2015).
+Lexicons are often de ﬁned in a top-down approach allowing theory to inform
+which words to include in a lexicon ( Humphreys, 2019 ). This contributes to the
+interpretability of lexicons. Due to their relative ease of use for researchers whoNatural Language Processing in Marketing 197are novice at NLP research, these tools are popular in the marketing and social
+science ﬁelds, and novel lexicon-based tools continue to be developed, e.g.,
+Wordify ( Hovy et al., 2021 ).
+However, there are several limitations to lexicons. For complex constructs,
+creating a well-performing lexicon can be dif ﬁcult and require intense human
+labor ( Chapman, 2020 ). Moreover, lexicons tend to be inferior even to traditional
+machine learning methods regarding classi ﬁcation accuracy ( Hartmann, Heit-
+mann, Siebert, & Schamp, 2022 ), which may lead to erroneous conclusions
+(Jaidka et al., 2020 ). One of the reasons for the limited performance is the
+context-dependent performance of lexicons ( Berger, Humphreys, et al., 2020 ).
+The same lexicon may not be appropriate to extract writing style in both socialmedia and news corpora. It is important to note that when developing a lexicon,special care should be taken to ensure internal, external, and construct validity.
+If the desired lexicon does not exist, researchers can train their own task-speci ﬁc
+writing style classi ﬁer using machine learning methods such as a random forest,
+na¨ıve Bayes, or neural networks. For example, Villarroel Ordenes et al. (2019) train a
+support vector machine to classify assertive, expressive, and directive text.
+Extracting the sentiment of a text is among the most popular NLP tasks in
+marketing and has been employed across many different applications. Sentimentanalysis is the “identi ﬁcation of positive or negative orientation of textual lan-
+guage ”(Hirschberg & Manning, 2015 , p. 265). K¨ubler, Colicev, and Pauwels
+(2020) investigate how different sentiment extraction tools are suitable to predict
+social media ’s impact on consumer mindset metrics. Numerous studies have
+investigated the effect of sentiment in user-generated content on aspects like sales(e.g., Tang, Fang, & Wang, 2014 ) or stock market performance (e.g., Tirunillai &
+Tellis, 2012 ).Chakraborty, Kim, and Sudhir (2022) perform aspect-based senti-
+ment analysis to create a more nuanced understanding of user-generatedcommunication about particular elements of a product or service. Closelyrelated to sentiment analysis is the detection of different emotions (e.g., anger,joy, disgust). For example, Rocklage and Fazio (2020) analyze contexts in which
+emotional content can back ﬁre.
+While many applications of sentiment analysis have relied on lexicon-based tools
+(Hartmann et al., 2019 ), state-of-the-art machine learning models often outperform
+more traditional approaches for sentiment analysis ( Hartmann et al., 2022 ). In the
+next section, we discuss how frontier NLP approaches have both improved ourability to extract concepts and topics, relationships, and sentiment and writing style,
+as well as open opportunities for additional novel applications (see also Table 1 ).
+4. THE NEXT METHODOLOGICAL FRONTIER:
+EMBEDDINGS, LANGUAGE MODELS,
+TRANSFER LEARNING
+NLP applications in marketing continue to move from extracting single words, to
+combining words into topics, to relationship extraction. This development is198 JOCHEN HARTMANN AND ODED NETZERlikely to be accelerated by novel technologies introduced in the NLP ﬁeld. A
+deﬁning element of the next methodological frontier in marketing are
+embedding-based methods, including static word embeddings such as word2vec
+(Mikolov, Chen, Corrado, & Dean, 2013 ), GloVe ( Pennington, Socher, &
+Manning, 2014 ), and fastText ( Bojanowski, Grave, Joulin, & Mikolov, 2017 )a s
+well as pretrained deep contextual language models such as BERT ( Devlin,
+Chang, Lee, & Toutanova, 2019 ), RoBERTa ( Liu et al., 2019 ), and GPT-3
+(Brown et al., 2020 ).
+Deep contextual language models allow researchers to study ﬁne-grained
+relationships between words and concepts (e.g., drugs appearing with certainside effects or problems with certain product features). In addition, they have theappealing property that they can bene ﬁt from the use of transfer learning .
+Transfer learning in NLP applications typically consists of two steps. First, alarge language model is pretrained on massive datasets such as English Wikipedia
+or the PILE, an 800GB dataset containing diverse text for language model
+training ( Gao et al., 2020 ). This approach bene ﬁts from work by large organi-
+zations like Google, Amazon, and Meta that have access to large amounts ofdata and advanced computing. Second, the researcher can ﬁne-tune the pre-
+trained, publicly available language model to complete a task in a particularapplication context. Transfer learning substantially reduces the amount ofannotated training data needed for the focal research objective and hascontributed to the remarkable performance levels that these models have ach-ieved ( Hartmann et al., 2022 ). We discuss static embeddings and vector semantics
+next, followed by a discussion of transfer learning and different types of languagemodels.
+4.1 Embeddings and Vector Semantics
+The idea behind word embedding methods is to represent a word by the words
+that tend to appear in its vicinity. The problem is that the space of words that
+appear next to each word can be very large and very sparse. To resolve thesparsity problem, the word is represented by a dense vector of lower dimen-sionality that is learned using the semantic information from local,i.e., neighboring, words (word2vec) or from global word co-occurrences (GloVe).Once word embeddings are constructed, one can look for relationships betweenwords by calculating similarities between words such that words that appear insimilar contexts tend to carry similar meanings. This concept already originatedin the 1950s and is also known as the distributional hypothesis (Harris, 1954 ).
+Consider, for example, the near-synonymous words “couch ”and “sofa. ”These
+words are likely to occur in comparable sentence environments with similar
+neighboring words such as seating or television ( Jurafsky & Martin, 2021 ).
+Consequently, their embedding representations would be closely aligned inmultidimensional semantic space ( Le & Mikolov, 2014 ).
+Among the most popular methods to represent words as vectors is word2vec
+(Mikolov, Chen et al., 2013 ). Word2vec embeddings are considered static because
+the same word used in different contexts will have the same ﬁxed embedding.Natural Language Processing in Marketing 199Consequently, static word embeddings cannot re ﬂect polysemy, i.e., the same
+word carrying multiple related meanings such as bank (as a noun versus as a verb
+or as the land next to a river versus a ﬁnancial institution). Despite this limitation,
+word2vec has proven powerful in various downstream applications to study the
+semantic relationship of words (e.g., Boghrati & Berger, 2019 ;Charlesworth
+et al., 2022 ), explore relational meanings and analogies (e.g., Mikolov, Sutskever,
+Chen, Corrado, & Dean, 2013 ), and historic change in word meaning, so-called
+diachronic word embeddings ( Hamilton, Leskovec, & Jurafsky, 2016 ).
+In contrast to labor-intensive feature engineering, embeddings make use of
+self-supervised representation learning, in which the vector representations can belearned automatically from text without supervision ( Mikolov, Chen et al., 2013 )
+and transferred to different applications ( Kim, 2014 ). Another advantage of
+embedding techniques, compared to traditional bag-of-words approaches, is thatthey often can deal with out-of-vocabulary words, words that the algorithm has
+not seen before, as long as the words in the proximity of unknown words are
+familiar. fastText, for example, works on character-level n-grams instead of onword-level. Consequently, it can return embeddings also for unseen or misspelledwords if they contain substrings of characters that are similar to words it has beentrained on. In some situations, embeddings are needed at the sentence level, forexample, to identify the similarity between product reviews or between differentsocial media users based on their self-descriptions. A simple approach is toaverage the word-level embeddings which belong to the sentence. Alternatively,methods such as doc2vec ( Le & Mikolov, 2014 ) and SentenceBERT ( Reimers &
+Gurevych, 2019 ) provide specialized architectures that are optimized to return
+semantically meaningful sentence embeddings.
+Returning to the earlier embeddings example of the words “couch ”and
+“sofa ”, these two words are indeed most similar when looking up the words with
+the highest similarity using a pretrained word2vec model, having a similarity of0.83 (see Fig. 1 ). The underlying model ( “word2vec-google-news-300 ”) was
+trained on approximately 100 billion words and is publicly available.
+2
+4.2 Deep Learning Architectures for NLP
+“Language is a sequence that unfolds in time ”(Jurafsky & Martin, 2021 , Chapter
+9, p. 1). Several deep learning architectures exist to model human language andsome can re ﬂect its temporal nature. Recurrent neural networks (RNNs, Elman,
+1990) are among these architectures. RNNs process a sentence, i.e., a sequence of
+words, sequentially, one word at a time. In contrast to classical feedforwardneural networks, which are sequence agnostic, an RNN ’s hidden layer includes a
+recurrent connection. At time t, the layer processes a hidden state h
+t-1, which
+captures information from words that have already been processed at preceding
+points in time, in addition to the input xt. There is no limit in terms of the length
+of the prior context to be included in this “ﬂuid representation ”of a text
+sequence ’s meaning ( Chollet, 2021 , p. 293). RNNs can be used for different NLP
+tasks. Intuitively, they can be used for text generation, with the objective topredict the next word in a sequence of text from the current word w
+tand the200 JOCHEN HARTMANN AND ODED NETZERprevious hidden state ht-1(Mikolov, Kara ﬁ´at, Burget, Cernock ´y, & Khudanpur,
+2010).3However, they can also be employed for text classi ﬁcation tasks, where
+theﬁnal hidden state is used as the input for a classi ﬁer such as an emotion
+classi ﬁer given the words up to word wt.
+A more complex derivative of RNNs are Long Short-Term Memory (LSTM)
+networks ( Hochreiter & Schmidhuber, 1997 ). LSTMs address the limitation of
+RNNs that the hidden states are biased to contain more information at the end ofthe sequence. Moreover, in training RNNs, due to the chain of computations,one may be faced with the vanishing gradients problem (Hochreiter, Bengio,
+Frasconi, & Schmidhuber, 2001 ), a problem that occurs when the noise that is
+induced in the sequential transmission of error information during back-
+propagation overwhelms the gradient information (Chollet, 2021). For thispurpose, LSTMs contain gates to control the ﬂow of information along the
+Fig. 1. Code Example for Similarity Comparison Between the Words
+“Couch ”and “Sofa. ”Note: All code examples from this book chapter are available
+on GitHub: https://github.com/j-hartmann/nlp-in-marketing .Natural Language Processing in Marketing 201network. These gates help LSTMs to selectively forget and remember informa-
+tion. Recent LSTM applications in marketing include sentiment analysis(Chakraborty et al., 2022 ;Li, Liao, & Xie, 2021 ) as well as sales conversion
+prediction ( Liu et al., 2019 ).
+Although commonly used for image classi ﬁcation tasks, convolutional neural
+networks (CNNs) trained with backpropagation ( LeCun et al., 1989 ) have also
+been used for textual analysis in marketing applications (e.g., Chakraborty et al.,
+2022;Liu et al., 2019 ;Puranam et al., 2021 ;Timoshenko & Hauser, 2019 ). In
+contrast to RNNs, CNNs do not model the sequential nature of language andhave no temporal memory (Chollet, 2021). However, CNNs can account foradjacent word groups or phrases and perform well in combination with LSTMs(e.g., Chakraborty et al., 2022 ).
+4.3 Transfer Learning and Transformer Models
+The advent of the transformer architecture ( Vaswani et al., 2017 ) has pushed
+language models ’performance and possibilities to unprecedented levels, quickly
+overtaking LSTMs as the state-of-the-art architectures. Transformers do not
+rely on convolutional or recurrent connections and can process a text sequence
+in parallel. Using so-called self-attention layers, when processing a word, thenetwork can selectively attend to the other words in the word ’sc o n t e x t ,
+allowing it to model linguistic relationships across words (more precisely,tokens ). Thereby, in contrast to static word embeddings such as word2vec,
+transformer models can represent words using contextualized embeddings,which helps for word sense disambiguation. Instead of being assigned a ﬁxed
+position in geometric feature space, contextual embeddings re ﬂect the
+context-dependent meaning of words in the speci ﬁc context the word appeared
+in. For static word embedding methods, the word “apple ”will have the same
+vector representation whether it appears in a technology context and refers to
+the technology powerhouse, or in Snow White referring to the poisoned fruit.
+Transformer models help solve this ambiguity. Moreover, the parallel pro-cessing of a text addresses the vanishing gradients problem of RNNs mentionedearlier ( Jurafsky & Martin, 2021 ). Combining the word embeddings with
+positional encodings is crucial for the transformer to capture word orderinformation. In addition, by processing the same text multiple times in parallel,transformers can model different types of relationships between words in thesame sentence (e.g., between a noun and its pronoun, or other longer-range andshorter-range word dependencies). This design is known as multihead attention(Vaswani et al., 2017 ).
+One of the most popular transformer models is BERT (Bidirectional Encoder
+Representations from Transformers; Devlin et al., 2019 ). BERT is trained
+through next sentence prediction and masked language modeling, where words inthe training data are randomly masked, and the training objective is to recoverthese words correctly. This approach helps the models to capture the linguisticstructure of language without explicit supervision signals ( Manning, Clark,
+Hewitt, Khandelwal, & Levy, 2020 ). Due to their ability to process text in202 JOCHEN HARTMANN AND ODED NETZERparallel, transformer models scale well to large amounts of data. BERT, for
+example, was trained on the BooksCorpus dataset (800 million words) andWikipedia (2.5 billion words; Devlin et al., 2019 ). This contributes to transformer
+models ’appealing property of being suited well for transfer learning for various
+downstream tasks, e.g., sequence classi ﬁcation, or part-of-speech tagging.
+The three main types of transformer models are autoregressive, autoencoding,
+and sequence-to-sequence models ( Hugging Face, 2022 ). Autoregressive or causal
+language models such as GPT-2 ( Radford et al., 2019 ) and GPT-3 ( Brown et al.,
+2020) are suited well for text generation (e.g., Reisenbichler et al., 2022 ). In
+contrast to BERT, which is trained to recover masked words based on left (past)and right (future) contexts ( Devlin et al., 2019 ), the training objective of GPT-2 is
+to create a generative tool that generates text given a textual prompt, i.e., astarting sequence of words that the model will complete, e.g., “The sun is shining.
+Let ’sg o ....”Hence, it only considers the left (past) context. Autoregressive
+models estimate the probability P(y jx), where yrepresents a sequence of pre-
+dicted words y5y
+1,y2,...,yn, and xrepresents the prompt x5x1,x2,...xnof
+existing words ( Tunstall, von Werra, & Wolf, 2022 ). Once trained, an autore-
+gressive model such as GPT-3 can create a text of arbitrary length by startingwith a prompt and iteratively appending the most likely next word to thatsequence. The example prompt could be completed to: “The sun is shining. Let ’s
+gooutside and have some ice cream .”
+Autoencoding models such as BERT and RoBERTa use both the left and
+right context when encoding a sequence of words. Clearly, this is bene ﬁcial when
+trying to infer complex relationships between words for tasks like sentimentanalysis that often requires a nuanced understanding of the dependencies across
+words in a sentence and would hence suffer if restricted to only the left context.
+They are also suited well for tasks such as sentence classi ﬁcation, NER, and
+extractive question answering ( Hugging Face, 2022 ). In marketing, autoencoding
+models have been used to infer purchase intentions from user-generated text(Hartmann et al., 2021 ) and to study customer perceptions of service ( Puranam
+et al., 2021 ).
+Lastly, there are sequence-to-sequence (or encoder –decoder) models such as
+BART ( Lewis et al., 2019 ) and T5 ( Raffel et al., 2019 ). As their name suggests,
+these models take as input a sequence and return as output a sequence. Theencoder transforms the input sequence into an intermediate representation, whilethe decoder predicts the next word w
+tin a target sequence, considering both the
+encoded input as well as the previous words w1towt-1. NLP tasks that require this
+kind of encoder –decoder architecture include text summarization, language
+translation, and generative question answering (e.g., from “How is the weather in
+NYC? ”to“You can expect a sunny day. ”).
+It is important to note that the three main transformer types are not mutually
+exclusive. For example, recent work demonstrates that pretrained BERT, GPT-2,and RoBERTa checkpoints can be used to initialize a model for varioussequence-to-sequence tasks ( Rothe et al., 2020 ). Similarly, ERNIE 3.0 ( Sun et al.,
+2021) fuses an autoregressive and autoencoding network, enabling ef ﬁcient
+application for natural language understanding and generation tasks. Despite thisNatural Language Processing in Marketing 203overlap, the taxonomy described above may facilitate effective method choice
+from an applied marketing perspective (e.g., using established autoregressivemodels such as GPT-2 for text generation; see Reisenbichler et al., 2022 ).
+5. MARKETING APPLICATIONS OF LANGUAGE MODELS
+AsTable 1 showcases, novel embedding-based tools can be used not only to
+obtain better results in established tasks (i.e., concept and topic extraction,
+relationship extraction, sentiment and writing style extraction) but also to tackle
+novel tasks (i.e., text generation, text summarization, multi-modal contentanalysis). A limited number of recent marketing applications demonstrate thispotential, for example, for multimodal representation learning ( Dew et al., 2021 )
+or automated text generation ( Carlson et al., 2022 ;Reisenbichler et al., 2022 ).
+5.1 Novel Approaches for Established Tasks
+The main advantage of applying novel transformer tools for established tasks is
+their performance across various downstream tasks. For example, state-of-the-artlanguage models can outperform lexicons by more than 20 percentage points inaccuracy for sentiment analysis ( Hartmann et al., 2022 ). This increased perfor-
+mance allows these methods to better capture linguistic nuances relative toestablished tools, which do not consider word order or the contextual meaning ofwords. In addition to the accuracy advantage, transfer learning methods often
+require smaller annotated training data than traditional machine learning
+methods ( Hartmann et al., 2022 ).
+For concept and topic extraction, the Embedded Topic Model (ETM)
+addresses the problem of working with large and heavy-tailed vocabularies,blending word embeddings with traditional topic models such as LDA ( Dieng,
+Ruiz, & Blei, 2020 ). ETM has been shown to outperform LDA in terms of both
+topic quality and predictive performance ( Dieng et al., 2020 ). For relationship
+extraction, language models can help grasp more ﬁne-grained relationships across
+words and entities compared to co-occurrence analyses (e.g., BERTopic; Groo-
+tendorst, 2022 ). These relationships can be analyzed at the word level using static
+embeddings (e.g., word2vec or GloVe) or on sentence level using contextual
+embeddings (e.g., SentenceBERT).
+5.2 Novel Approaches for Novel Tasks
+However, beyond improving performance on existing tasks, advances in NLP
+open the window to address challenges that were impossible to address before.The large-scale pretraining allows language models to learn a ﬁne-grained lin-
+guistic understanding that is helpful for various downstream tasks. Among themost impressive novel tasks is automated text generation at nearly human-likestandards.
+4The recently released ChatGPT by OpenAI shows a great promise in
+that respect. Firms communicate with their customers, employees, investors, andthe public across a large variety of channels ( Berger, Humphreys, et al., 2020 ).204 JOCHEN HARTMANN AND ODED NETZERContent generation can be employed to serve users via chatbots or digital voice
+assistants that can automatically respond to users ’inputs. This highlights the
+potential economic impact that this novel NLP task may generate. Similarly,
+automatic text summarization allows advertisers to extract rich knowledge
+beyond word counts from large-scale text corpora. E-commerce websites andreview platforms can summarize the content of a product or a service, andelaborate consumer reviews can be aggregated into concise summaries increasingvalue to other users.
+Recent marketing examples have employed text generation in the context of
+search engine optimization (SEO) ( Reisenbichler et al., 2022 ) and the creation of
+wine reviews ( Carlson et al., 2022 ). For example, Reisenbichler et al. (2022) build
+on GPT-2 and show how natural language generation can support contentmarketing by proposing a semiautomated “human in the loop ”methodology that
+can create human-like SEO content. Carlson et al. (2022) even formulate a “kind
+of‘Turing test ’”to test if human judges can tell which reviews were generated by
+humans and which ones were automatically created by a transformer model.
+5
+For traditional machine learning methods, lack of training data have often
+been a limiting factor ( Berger, Humphreys, et al., 2020 ). Due to their large-scale
+pretraining, language models (such as BART) can also be used for new tasks forwhich no training exist, often referred to as zero-shot classi ﬁcation ( Yin, Hay, &
+Roth, 2019 ). One approach for zero-shot classi ﬁcation is to formulate a
+sentence –class pair (e.g., “What a great product. ”,“positive ”) as a natural lan-
+guage inference (NLI) task, where the sentence represents the premise and thecandidate label is formulated as a hypothesis (i.e., premise: “What a great
+product ”, hypothesis: “This example is positive .”). Label probabilities are
+obtained by converting the probabilities for entailment and contradiction from
+the NLI task. Relatedly, recent few-shot methods such as SetFit have producedremarkable accuracy levels with as little as a dozen of training examples ( Tun-
+stall, Reimers et al., 2022 ).
+To facilitate the application of state-of-the-art language models for novel
+marketing applications, Table 2 provides a list of pretrained language models
+available for the marketing community. All models are open-access and can beapplied with fairly limited coding knowledge, e.g., for off-the-shelf sentimentanalysis (SiEBERT; Hartmann et al., 2022 ), multimodal representation learning
+(CLIP; Radford et al., 2021 ), text generation (GPT-J 6B; Wang & Komatsuzaki,
+2021), and text-to-image generation (Stable Diffusion; Rombach et al., 2022).
+Note that commercial alternatives exist, e.g., DALL ×E 2 for text-to-image gen-
+eration (Ramesh, Dhariwal, Nichol, Chu, & Chen, 2022) or ChatGPT forconversational text generation ( Ouyang et al., 2022 ).
+6. DISCUSSION
+For more than a decade, NLP has enabled various marketing applications across
+diverse contexts. In this chapter, we discussed applications of textual analysis inmarketing along the dimensions of the dual role of language, its use as aNatural Language Processing in Marketing 205dependent and independent variable, as well as the opportunity to study causal
+effects using text data. Moreover, we discussed how NLP methods have beenemployed for established tasks in marketing, i.e., concept and topic extraction,
+relationship extraction, sentiment and writing style extraction , and delineated
+novel tasks enabled by recent technological advancements, i.e., text generation,
+text summarization, and multimodal representation learning .Table 2. Pretrained Models for Marketing Applications (Selection).
+Models Description Training Data References
+Established tasks
+Concept and topic extraction
+FLERT (or BERT-
+base-NER)Extracts named entities CoNLL-03 Schweter and Akbik (2020)
+BART-large-NLI Returns probabilities
+for label candidatesMultiNLI (MLNI) Lewis et al. (2019)
+Relationship extraction
+multi-qa-MiniLM-
+L6-cos-v1Computes sentence
+similarity17 datasets (215M
+question –answer
+pairs)Reimers and Gurevych
+(2019)
+Sentiment and writing style extraction
+SiEBERT Predicts binary
+sentiment15 datasets Hartmann et al. (2022)
+Sentiment
+(English)Predicts three-class
+sentiment5,304 social media
+commentsHartmann et al. (2021)
+Emotion (English) Predicts Ekman ’s basic
+emotions6 datasets (19,677
+texts)Hartmann, Zhang, and
+Netzer (2022)
+Novel tasksText generation
+GPT-J 6B Generates text based
+on promptThe PILE ( Gao
+et al., 2020 )Wang and Komatsuzaki
+(2021)
+DistilGPT2 Generates text based
+on promptOpenWeb-
+TextCorpusSanh, Debut, Chaumond,
+and Wolf (2019)
+Text summarization
+DistilBERT-base-
+cased-distilled-squadReturns answers to
+questionsSQuAD v1.1 Sanh et al. (2019)
+Multimodal representation learning
+CLIP Different tasks
+(including imageclassi ﬁcation)400M image-text
+pairsRadford et al. (2021)
+Whisper Transcribes speech to
+text680,000 hours of
+audioRadford et al. (2022)
+Stable Diffusion Generates images
+based on text promptsLAION dataset
+(Schuhmann et al.
+2022)Rombach, Blattmann,
+Lorenz, Esser, and Ommer
+(2022)
+Note: The supplementary GitHub repository contains examples for each task: https://
+github.com/j-hartmann/nlp-in-marketing .206 JOCHEN HARTMANN AND ODED NETZER6.1 Roadmap and Future Trends
+While the body of work leveraging textual analysis in marketing already seems
+vast, we believe there are many opportunities ahead, leading to a rapid prolif-eration of language models in applied marketing research. These opportunitieswill stem from new business applications that involve textual data (e.g., sharingeconomy, streaming, and metaverse) as well as advances in the development of
+NLP tools. As outlined before, the novel methods, including state-of-the-art
+transformer models, can be used to address existing tasks with higher perfor-mance levels or to generate novel applications (e.g., natural language generation).Next, we emphasize three trends that are likely to shape the future of NLPapplications in marketing.
+First, there is an immense opportunity in leveraging transfer learning in the
+marketing community. While the NLP and computer science communities dowell in freely distributing their models, data, and code, (e.g., BLOOM by Scao
+et al. (2022) , trained on 59 languages, or Meta ’s recent release of the open pre-
+trained transformer with 175 billion parameters, called OPT-175B; Zhang et al.,
+2022), the marketing community has room to grow in that respect. Rather than
+each paper starting from scratch training its own model on its own data, if we
+share our data and trained models, we can transfer learning from one applicationto another. The Open Science movement is a positive step in that direction.Consider, for example, the dozens of papers analyzing consumer reviews. If thesepapers would share their data and trained models, subsequent papers can buildon these to generate new insights with higher accuracy levels and richer languagecontent. In that sense, the community will be able to build on each other ’s work
+not only substantively but also methodologically. Combining multiple datasetsfor more extensive and more diverse training data (e.g., SiEBERT and the PILE)can lead to better outcomes. Moreover, the community is likely to bene ﬁt from
+benchmarks that cover a broader variety of NLP tasks (e.g., XTREME; Hu
+et al., 2020 ), whose leaderboards can serve as an effective starting point for
+researchers to explore method options (e.g., GLUE, SQuAD).
+Second, capturing the truerelationship across words, sentences, and concepts
+is a promising area of research. While embedding-based methods such asword2vec and related applications have enabled many fascinating applications,there is still a long way to go to automatically disentangle related constructs suchas similarity, coherence, and relatedness using automated methods. Despite theimpressive performance leap introduced by transformer models, they still strugglewith many language patterns that humans can easily interpret, like simplenegations ( Hossain, Chinnappa, & Blanco, 2022 ) or sarcasm. Further work is
+needed to identify and address these shortcomings to enable reliable applications
+in marketing and social sciences.
+Third, we see a promising opportunity in multimodal representation learning
+using methods such as CLIP ( Radford et al., 2021 ) and others as well as blending
+multiple sources of multimedia data such as text, image, and video using custommultimodal network architectures (see Grewal et al., 2021 for a recentNatural Language Processing in Marketing 207discussion). Until now, applied examples in marketing remain rare (e.g.,
+Boughanmi & Ansari, 2021 ;Dew et al., 2022) .
+6.2 Challenges, Biases, and Potential Harms
+Human language is riddled with ambiguity and in constant ﬂux. Several chal-
+lenges remain that can be addressed by the marketing community. Lack of
+interpretability is often called out as a limitation of black-box deep learning
+models ( Rai, 2020 ). Better understanding the errors and sensitivity of a trans-
+former model will be helpful in building trust in the model ’s prediction. More-
+over, adding such a layer of interpretability helps to understand the variables ofinterest and their nuances better. Methods such as Local InterpretableModel-agnostic Explanations (LIME; Ribeiro et al., 2016) can help shed light on“why ”certain predictions are made. For example, Hartmann et al. (2021)
+combine LIME with RoBERTa to highlight which words are associated withexpressed purchase intentions. Alternatively, one can use variable selection toolssuch as regularized regression to reduce the number of predictors (e.g., Netzer
+et al., 2019 ). Dimensionality reduction tools such as topic modeling, or the use of
+categorized dictionaries, often allow the researcher to reduce the dimensionality
+of the problem such that the textual variables can enter into traditional econo-metric inference approaches in an intuitive and explainable manner.
+Transfer learning dramatically reduces the need for annotated training data in
+theﬁne-tuning stage. At the same time, large-scale pretraining can introduce
+biases into the model. Language models pretrained on un ﬁltered massive internet
+text data can replicate toxic language, amplify implicit biases ( Hartmann,
+Schwenzow, & Witte, 2023 ), perpetuate stereotypes of religion ( Abid, Farooqi, &
+Zou, 2021 ), gender ( Bolukbasi, Chang, Zou, Saligrama, & Kalai, 2016 ), or sexual
+orientation ( Sheng, Chang, Natarajan, & Peng, 2019 ), and may pose privacy
+threats when trained on sensitive data ( Carlini et al., 2021 ). Debiasing these
+models has received recent attention in the literature (e.g., Schramowski, Turan,
+Andersen, Rothkopf, & Kersting, 2022 ;Zhao, Wang, Yatskar, Ordonez, &
+Chang, 2017 ), but remains an open research question. Human biases can also
+creep into the models in the data annotation stage. Careful coding guidelines andquality checks can help address these risks. As marketing researchers, we shouldbe aware of the different sources of biases and develop methods to address them.
+NLP methods rely on large amounts of textual training data for pretraining
+and relevant textual data for any focal application. Sparse model architectures(e.g., ST-MoE; Zoph et al., 2022 ) can help reduce the appetite of data-hungry
+deep learning models and improve their training ef ﬁciency. Relatedly, researchers
+should pay close attention to legal and ethical privacy concerns when working
+with large-scale textual data. For example, many platforms restrict data scraping
+for academic research purposes. In such cases, using an Application Program-ming Interface (API) may be a more appropriate route ( Boegershausen, Datta,
+Borah, & Stephen, 2022 ). Researchers should also ensure to remove any identi-
+ﬁable information when dealing with consumer-level textual data like call center
+conversations or chats. NER techniques can help identify such personal data.208 JOCHEN HARTMANN AND ODED NETZERWhen extracting constructs from textual data, validation is a core concern.
+How do researchers know that they have extracted what they think they did?Assessing a method ’s accuracy is important not only for top-down lexicons that
+are derived from theoretical considerations ( Berger, Humphreys, et al., 2020 ;
+Humphreys, 2019 ) but also for bottom-up methods such as machine learning
+classi ﬁers. For the latter, evaluation tends to be more common as the training
+process requires annotated training data. Using off-the-shelf lexicons withoutassessing their performance for a given task may be risky. The same applies tocommercial black-box solutions, which seldom release their source code. Forexample, Borah and Tellis (2016) employ commercial software for text classi ﬁ-
+cation, but used research assistants for validation, to study the effect of productrecalls on competitor brands. In addition, nontextual data can and, if possible,should be used to validate the text mining algorithm. For example, Netzer et al.
+(2012) compared the market structure maps derived from text mining social
+media posts with those derived for actual car switching, obtaining high degree of
+convergence. Similarly, Schweidel and Moe (2014) compared brand health
+measures from social media with those obtained from traditional surveys.
+Lastly, it is important to note that even for machine learning models with
+equivalent training domain performance, the interim representations of suchmodels may still look and perform very differently due to a challenge known as“underspeci ﬁcation ”(D’Amour et al., 2020 ). Once deployed in practice, model
+performance can deteriorate unexpectedly, which requires special attention forresearch projects that bridge academia and practice.
+7. CONCLUSION
+To conclude, NLP in marketing is here to stay. The advent of pretrained trans-former models has opened new and exciting avenues for marketing scholars. Theseinclude text generation, text summarization, and multimodal content representa-tion and can be used for a myriad of applications, including chatbots, voice assis-
+tants, and ﬁne-grained semantical relationships across words, sentences, and
+concepts. We hope this chapter and the supplementary code examples help inter-ested scholars in exploring these rich opportunities related to NLP in marketing.
+ACKNOWLEDGMENTS
+The authors thank Matthias Aßenmacher for feedback on an earlier version of this
+chapter. Jochen Hartmann is grateful for the grant “Challenging the Boundaries of
+Natural Language Processing, ”received from the Claussen-Simon Foundation.
+NOTES
+1.https://github.com/j-hartmann/nlp-in-marketing
+2. For details on the underlying data, see Gensim-data: https://github.com/RaRe-
+Technologies/gensim-data .Natural Language Processing in Marketing 2093. To increase the learning capacity of recurrent neural networks, multiple layers can be
+stacked. In addition, bidirectional recurrent neural networks that process a sequence bothchronologically and anti-chronologically and concatenate the resulting representations,may further improve performance (Chollet, 2021; see Wang, Qin, Luo, & Kou, 2022 for a
+recent marketing application).
+4. When GPT-2 was introduced in February 2019 the public release of the full model was
+held back for six months, supposedly due to the fear that GPT-2 would allow ill-willed
+users to produce fake news and deceptive content at scale ( https://openai.com/blog/gpt-2-6-
+month-follow-up/ ).
+5. Early attempts to automatic text generation and text summarization have existed since
+at least the 1990s ( Mitra, Singhal, & Buckley, 1997 ;Rambow & Korelsky, 1992 ). However,
+their adoption in marketing and related ﬁelds was slow until their performance increased
+with the development of transformer models.
+REFERENCES
+Abid, A., Farooqi, M., & Zou, J. (2021). Large language models associate Muslims with violence.
+Nature Machine Intelligence ,3(6), 461 –463.
+Balducci, B., & Marinova, D. (2018). Unstructured data in marketing. Journal of the Academy of
+Marketing Science ,46(4), 557 –590.
+Berger, J., Humphreys, A., Ludwig, S., Moe, W. W., Netzer, O., & Schweidel, D. A. (2020). Uniting
+the tribes: Using text for marketing insight. Journal of Marketing ,84(1), 1 –25.
+Berger, J., & Milkman, K. L. (2012). What makes online content viral?. Journal of Marketing
+Research ,49(2), 192 –205.
+Berger, J., Sherman, G., & Ungar, L. (2020). TextAnalyzer. Retrieved from http://textanalyzer.org
+Blei, D. M., Ng, A. Y., & Jordan, M. I. (2003). Latent Dirichlet allocation. Journal of Machine
+Learning Research ,3(Jan), 993 –1022.
+Boegershausen, J., Datta, H., Borah, A., & Stephen, A. T. (2022). Fields of gold: Scraping web data for
+marketing insights. Journal of Marketing ,86(5), 1 –20.
+Boghrati, R., & Berger, J. (2019). Quantifying 50 years of misogyny in music . Working Paper.
+Bojanowski, P., Grave, E., Joulin, A., & Mikolov, T. (2017). Enriching word vectors with subword
+information. Transactions of the Association for Computational Linguistics ,5, 135 –146.
+Bolukbasi, T., Chang, K. W., Zou, J. Y., Saligrama, V., & Kalai, A. T. (2016). Man is to computer
+programmer as woman is to homemaker? Debiasing word embeddings. Advances in Neural
+Information Processing Systems ,29.
+Borah, A., & Tellis, G. J. (2016). Halo (spillover) effects in social media: do product recalls of one
+brand hurt or help rival brands?. Journal of Marketing Research ,53(2), 143 –160.
+Boughanmi, K., & Ansari, A. (2021). Dynamics of musical success: A machine learning approach for
+multimedia data fusion. Journal of Marketing Research ,58(6), 1034 –1057.
+Bovet, A., Morone, F., & Makse, H. A. (2018). Validation of Twitter opinion trends with national
+polling aggregates: Hillary Clinton vs Donald Trump. Scienti ﬁc Reports ,8(1), 1 –16.
+Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., ... Amodei, D. (2020).
+Language models are few-shot learners. Advances in Neural Information Processing Systems ,
+33, 1877 –1901.
+Brysbaert, M., Warriner, A. B., & Kuperman, V. (2014). Concreteness ratings for 40 thousand
+generally known English word lemmas. Behavior Research Methods ,46(3), 904 –911.
+B¨uschken, J., & Allenby, G. M. (2016). Sentence-based text analysis for customer reviews. Marketing
+Science ,35(6), 953 –975.
+Canny, J. (2004). GaP: A factor model for discrete data. In Proceedings of the 27th annual international
+ACM SIGIR conference on research and development in information retrieval , New York, NY,
+USA (pp. 122 –129). ACM.
+Carlini, N., Tramer, F., Wallace, E., Jagielski, M., Herbert-Voss, A., Lee, K., ...Raffel, C. (2021).
+Extracting training data from large language models. In 30th USENIX security symposium
+(USENIX Security 21) (pp. 2633 –2650).210 JOCHEN HARTMANN AND ODED NETZERCarlson, K., Kopalle, P. K., Riddell, A., Rockmore, D., & Vana, P. (2022). Complementing human
+effort in online reviews: A deep learning approach to automatic content generation and reviewsynthesis. International Journal of Research in Marketing . In Press. doi:10.1016/j.ijresmar.2022.
+02.004
+Chakraborty, I., Kim, M., & Sudhir, K. (2022). Attribute sentiment scoring with online text reviews:
+Accounting for language structure and missing attributes. Journal of Marketing Research ,
+59(3), 600 –622.
+Chapman, C. (2020). Commentary: Mind your text in marketing practice. Journal of Marketing ,84(1),
+26–31.
+Charlesworth, T. E. S., Caliskan, A., & Banaji, M. R. (2022). Historical representations of social
+groups across 200 years of word embeddings from Google Books. Proceedings of the National
+Academy of Sciences ,119(28), 1 –17.
+Chollet, F. (2021). Deep learning with Python (2nd Ed.). Shelter Island, NY: Manning.
+Chung, J., Johar, G. V., Li, Y., Netzer, O., & Pearson, M. (2022). Mining consumer minds: Down-
+stream consequences of host motivations for home-sharing platforms. Journal of Consumer
+Research ,48(5), 817 –838.
+D’Amour, A., Heller, K., Moldovan, D., Adlam, B., Alipanahi, B., Beutel, A., ...Sculley, D. (2020).
+Underspeci ﬁcation presents challenges for credibility in modern machine learning. arXiv pre-
+print arXiv:2011.03395.
+Devlin, J., Chang, M. W., Lee, K., & Toutanova, K. (2019). BERT: Pre-training of deep bidirectional
+transformers for language understanding . arXiv preprint arXiv:1810.04805.
+Dew, R., Ansari, A., & Toubia, O. (2022). Letting logos speak: Leveraging multiview representation
+learning for data-driven branding and logo design. Marketing Science ,41(2), 401 –425.
+Dieng, A. B., Ruiz, F. J., & Blei, D. M. (2020). Topic modeling in embedding spaces. Transactions of
+the Association for Computational Linguistics ,8, 439 –453.
+Egami, N., Fong, C. J., Grimmer, J., Roberts, M. E., & Stewart, B. M. (2018). How to make causal
+inferences using texts. arXiv preprint arXiv:1802.02163.
+Eliashberg, J., Hui, S. K., & Zhang, Z. J. (2007). From story line to box of ﬁce: A new approach for
+green-lighting movie scripts. Management Science ,53(6), 881 –893.
+Elman, J. L. (1990). Finding structure in time. Cognitive Science ,14(2), 179 –211.
+Feldman, R., Netzer, O., Peretz, A., & Rosenfeld, B. (2015). Utilizing text mining on online medical
+forums to predict label change due to adverse drug reactions. In Proceedings of the 21th ACM
+SIGKDD international conference on knowledge discovery and data mining (pp. 1779 –1788).
+Finkel, J. R., Grenager, T., & Manning, C. D. (2005, June). Incorporating non-local information into
+information extraction systems by Gibbs sampling. In Proceedings of the 43rd annual meeting of
+the association for computational linguistics (ACL
+’05)(pp. 363 –370).
+Gao, L., Biderman, S., Black, S., Golding, L., Hoppe, T., Foster, C., ...Leahy, C. (2020). The PILE:
+An 800GB dataset of diverse text for language modeling. arXiv preprint arXiv:2101.00027.
+Goldfarb, A., Tucker, C., & Wang, Y. (2022). Conducting research in marketing with quasi-experi-
+ments. Journal of Marketing ,86(3), 1 –20.
+Gopalan, P., Hofman, J. M., & Blei, D. M. (2013). Scalable recommendation with poisson factorization .
+arXiv preprint arXiv:1311.1704.
+Grewal, R., Gupta, S., & Hamilton, R. (2021). Marketing insights from multimedia data: Text, image,
+audio, and video. Journal of Marketing Research ,58(6), 1025 –1033.
+Grootendorst, M. (2022). BERTopic: Neural topic modeling with a class-based TF-IDF procedure.
+arXiv preprint arXiv:2203.05794.
+Hamilton, W. L., Leskovec, J., & Jurafsky, D. (2016). Diachronic word embeddings reveal statistical
+laws of semantic change. arXiv preprint arXiv:1605.09096.
+Harris, Z. S. (1954). Distributional structure. Word ,10(2–3), 146 –162.
+Hartmann, J., Heitmann, M., Schamp, C., & Netzer, O. (2021). The power of brand sel ﬁes.Journal of
+Marketing Research ,58(6), 1159 –1177.
+Hartmann, J., Heitmann, M., Siebert, C., & Schamp, C. (2022). More than a feeling: Accuracy and
+application of sentiment analysis. International Journal of Research in Marketing . In Press. doi:
+10.1016/j.ijresmar.2022.05.005Natural Language Processing in Marketing 211Hartmann, J., Huppertz, J., Schamp, C., & Heitmann, M. (2019). Comparing automated text classi-
+ﬁcation methods. International Journal of Research in Marketing ,36(1), 20 –38.
+Hartmann, J., Schwenzow, J., & Witte, M. (2023). The political ideology of conversational AI:
+Converging evidence on ChatGPT ’s pro-environmental, left-libertarian orientation. SSRN
+preprint: https://ssrn.com/abstract=4316084 .
+Hirschberg, J., & Manning, C. D. (2015). Advances in natural language processing. Science ,349(6245),
+261 –266.
+Hochreiter, S., Bengio, Y., Frasconi, P., & Schmidhuber, J. (2001). Gradient ﬂow in recurrent nets: The
+difﬁculty of learning long-term dependencies.
+Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory. Neural Computation ,9(8),
+1735 –1780.
+Hossain, M. M., Chinnappa, D., & Blanco, E. (2022). An analysis of negation in natural language
+understanding corpora. arXiv preprint arXiv:2203.08929.
+Hovy, D., Melumad, S., & Inman, J. J. (2021). Wordify: A tool for discovering and differentiating
+consumer vocabularies. Journal of Consumer Research ,48(3), 394 –414.
+Hu, J., Ruder, S., Siddhant, A., Neubig, G., Firat, O., & Johnson, M. (2020). Xtreme: A massively
+multilingual multi-task benchmark for evaluating cross-lingual generalisation. In International
+conference on machine learning (pp. 4411 –4421).
+Hugging Face. (2022). Hugging face course. Retrieved from https://huggingface.co/course/
+Humphreys, A. (2019, May). Automated text analysis. In Handbook of market research (pp. 1 –32).
+Humphreys, A., & Wang, R. J. H. (2018). Automated text analysis for consumer research. Journal of
+Consumer Research ,44(6), 1274 –1306.
+Hutto, C., & Gilbert, E. (2014). Vader: A parsimonious rule-based model for sentiment analysis of
+social media text. In Proceedings of the international AAAI conference on web and social media
+(Vol. 8(1), pp. 216 –225).
+Jaidka, K., Giorgi, S., Schwartz, H. A., Kern, M. L., Ungar, L. H., & Eichstaedt, J. C. (2020).
+Estimating geographic subjective well-being from Twitter: A comparison of dictionary anddata-driven language methods. Proceedings of the National Academy of Sciences ,117(19),
+10165 –10171.
+Jedidi, K., Schmitt, B. H., Ben Sliman, M., & Li, Y. (2021). R2M Index 1.0: Assessing the practical
+relevance of academic marketing articles. Journal of Marketing ,85(5), 22 –41.
+Jurafsky, D., & Martin, J. H. (2021). Speech and language processing (Vol. 3). Prentice-Hall.
+Keith, K. A., Jensen, D., & O ’Connor, B. (2020). Text and causal inference: A review of using text to
+remove confounding from causal estimates. arXiv preprint arXiv:2005.00649.
+Kim, Y. (2014). Convolutional neural networks for sentence classi
+ﬁcation. arXiv preprint arXiv: 1408.
+5882.
+Klostermann, J., Plumeyer, A., B ¨oger, D., & Decker, R. (2019). Extracting brand information from
+social networks: Integrating image, text, and social tagging data. International Journal of
+Research in Marketing ,35(4), 538 –556.
+K¨ubler, R. V., Colicev, A., & Pauwels, K. H. (2020). Social media ’s impact on the consumer mindset:
+When to use which sentiment extraction tool? Journal of Interactive Marketing ,50, 136 –155.
+LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature ,521(7553), 436 –444.
+LeCun, Y., Boser, B., Denker, J. S., Henderson, D., Howard, R. E., Hubbard, W., & Jackel, L. D.
+(1989). Backpropagation applied to handwritten zip code recognition. Neural Computation ,
+1(4), 541 –551.
+Le, Q., & Mikolov, T. (2014). Distributed representations of sentences and documents. In International
+conference on machine learning (pp. 1188 –1196). PMLR.
+Lee, T. Y., & Bradlow, E. T. (2011). Automated marketing research using online customer reviews.
+Journal of Marketing Research ,48(5), 881 –894.
+Lewis, M., Liu, Y., Goyal, N., Ghazvininejad, M., Mohamed, A., Levy, O., ...Zettlemoyer, L. (2019).
+Bart: Denoising sequence-to-sequence pre-training for natural language generation, translation,and comprehension. arXiv preprint arXiv:1910.13461.
+Li, X., Liao, C., & Xie, Y. (2021). Digital piracy, creative productivity, and customer care effort:
+Evidence from the digital publishing industry. Marketing Science ,40(4), 685 –707.212 JOCHEN HARTMANN AND ODED NETZERLiu, X., Lee, D., & Srinivasan, K. (2019). Large-scale cross-category analysis of consumer review
+content on sales conversion leveraging deep learning. Journal of Marketing Research ,56(6),
+918 –943.
+Liu, X., Shi, S. W., Teixeira, T., & Wedel, M. (2018). Video content marketing: The making of clips.
+Journal of Marketing ,82(4), 86 –101.
+Liu, J., & Toubia, O. (2018). A semantic approach for estimating consumer content preferences from
+online search queries. Marketing Science ,37(6), 930 –952.
+Liu, J., Toubia, O., & Hill, S. (2021). Content-based model of web search behavior: An application to
+tv show search. Management Science ,67(10), 6378 –6398.
+Manning, C. D., Clark, K., Hewitt, J., Khandelwal, U., & Levy, O. (2020). Emergent linguistic
+structure in arti ﬁcial neural networks trained by self-supervision. Proceedings of the National
+Academy of Sciences ,117(48), 30046 –30054.
+Melumad, S., Inman, J. J., & Pham, M. T. (2019). Selectively emotional: How smartphone use changes
+user-generated content. Journal of Marketing Research ,56(2), 259 –275.
+Mikolov, T., Chen, K., Corrado, G., & Dean, J. (2013). Ef ﬁcient estimation of word representations in
+vector space. arXiv preprint arXiv:1301.3781.
+Mikolov, T., Kara ﬁ´at, M., Burget, L., Cernock ´y, J., & Khudanpur, S. (2010). Recurrent neural
+network based language model. In Interspeech (Vol. 2(3), pp. 1045 –1048).
+Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S., & Dean, J. (2013). Distributed representations of
+words and phrases and their compositionality. Advances in Neural Information Processing
+Systems ,26.
+Mitra, M., Singhal, A., & Buckley, C. (1997). Automatic text summarization by paragraph extraction.
+InIntelligent scalable text summarization .
+Nam, H., Joshi, Y. V., & Kannan, P. K. (2017). Harvesting brand information from social tags.
+Journal of Marketing ,81(4), 88 –108.
+Netzer, O., Feldman, R., Goldenberg, J., & Fresko, M. (2012). Mine your own business:
+Market-structure surveillance through text mining. Marketing Science ,31(3), 521 –543.
+Netzer, O., Lemaire, A., & Herzenstein, M. (2019). When words sweat: Identifying signals for loan
+default in the text of loan applications. Journal of Marketing Research ,56(6), 960 –980.
+Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., ... Lowe, R. (2022).
+Training language models to follow instructions with human feedback. arXiv preprint arXiv:2203.02155.
+Packard, G., & Berger, J. (2020). Thinking of you: How second-person pronouns shape cultural
+success. Psychological Science ,31(4), 397 –407.
+Packard, G., & Berger, J. (2021). How concrete language shapes customer satisfaction. Journal of
+Consumer Research ,47(5), 787 –806.
+Pennebaker, J. W., Boyd, R. L., Jordan, K., & Blackburn, K. (2015). The development and psycho-
+metric properties of LIWC2015. Retrieved from https://repositories.lib.utexas.edu/bitstream/
+handle/2152/31333/LIWC2015_LanguageManual.pdf
+Pennington, J., Socher, R., & Manning, C. D. (2014, October). Glove: Global vectors for word rep-
+resentation. In Proceedings of the 2014 conference on empirical methods in natural language
+processing (EMNLP) (pp. 1532 –1543).
+Puranam, D., Kadiyali, V., & Narayan, V. (2021). The impact of increase in minimum wages on
+consumer perceptions of service: A transformer model of online restaurant reviews. Marketing
+Science ,40(5), 985 –1004.
+Puranam, D., Narayan, V., & Kadiyali, V. (2017). The effect of calorie posting regulation on consumer
+opinion: A ﬂexible latent Dirichlet allocation model with informative priors. Marketing Sci-
+ence,36(5), 726 –746.
+Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., ...Sutskever, I. (2021).
+Learning transferable visual models from natural language supervision. In International con-
+ference on machine learning (pp. 8748 –8763).
+Radford, A., Kim, J. W., Xu, T., Brockman, G., McLeavey, C., & Sutskever, I. (2022). Robust speech
+recognition via large-scale weak supervision . OpenAI Blog. Retrieved from https://cdn.openai.
+com/papers/whisper.pdfNatural Language Processing in Marketing 213Radford, A., Wu, J., Rewon, C., Luan, D., Amodei, D., & Sutskever, I. (2019). Language models are
+unsupervised multitask learners.
+Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., ...Liu, P. J. (2019). Exploring
+the limits of transfer learning with a uni ﬁed text-to-text transformer. arXiv preprint arXiv:1910.
+10683.
+Rai, A. (2020). Explainable AI: From black box to glass box. Journal of the Academy of Marketing
+Science ,48(1), 137 –141.
+Rambow, O., & Korelsky, T. (1992, March). Applied text generation. In Third conference on applied
+natural language processing (pp. 40 –47).
+Ramesh, A., Dhariwal, P., Nichol, A., Chu, C., & Chen, M. (2022). Hierarchical text-conditional
+image generation with CLIP latents. arXiv preprint arXiv:2204.06125.
+Reimers, N., & Gurevych, I. (2019). Sentence-BERT: Sentence embeddings using siamese Bert-net-
+works. arXiv preprint arXiv:1908.10084.
+Reisenbichler, M., Reutterer, T., Schweidel, D., & Dan, D. (2022). Frontiers: Supporting content
+marketing with natural language generation. Marketing Science ,41(3), 441 –452.
+Rocklage, M. D., & Fazio, R. H. (2020). The enhancing versus back ﬁring effects of positive emotion in
+consumer reviews. Journal of Marketing Research ,57(2), 332 –352.
+Rocklage, M. D., Rucker, D. D., & Nordgren, L. F. (2018). The Evaluative Lexicon 2.0: The mea-
+surement of emotionality, extremity, and valence in language. Behavior Research Methods ,
+50(4), 1327 –1344.
+Rocklage, M. D., Rucker, D. D., & Nordgren, L. F. (2021). Mass-scale emotionality reveals human
+behaviour and marketplace success. Nature Human Behaviour ,5(10), 1323 –1329.
+Rombach, R., Blattmann, A., Lorenz, D., Esser, P., & Ommer, B. (2022). High-resolution image
+synthesis with latent diffusion models. In Proceedings of the IEEE/CVF conference on computer
+vision and pattern recognition (pp. 10684 –10695).
+Rothe, S., Narayan, S., & Severyn, A. (2020). Leveraging pre-trained checkpoints for sequence gen-
+eration tasks. Transactions of the Association for Computational Linguistics ,8, 264 –280.
+Sanh, V., Debut, L., Chaumond, J., & Wolf, T. (2019). DistilBERT, a distilled version of BERT:
+Smaller, faster, cheaper and lighter. arXiv preprint arXiv:1910.01108.
+Scao, T. L., Fan, A., Akiki, C., Pavlick, E., Ili ´c, S., Hesslow, D., ... Manica, M. (2022). BLOOM: A
+176B-parameter open-access multilingual language model. arXiv preprint arXiv:2211.05100.
+Schramowski, P., Turan, C., Andersen, N., Rothkopf, C. A., & Kersting, K. (2022). Large pre-trained
+language models contain human-like biases of what is right and wrong to do. Nature Machine
+Intelligence ,4(3), 258 –268.
+Schuhmann, C., Beaumont, R., Vencu, R., Gordon, C., Wightman, R., Cherti, M., ... Jitsev, J. (2022).
+Laion-5b: An open large-scale dataset for training next generation image-text models. arXivpreprint arXiv:2210.08402.
+Schweidel, D. A., & Moe, W. W. (2014). Listening in on social media: A joint model of sentiment and
+venue format choice. Journal of Marketing Research ,51(4), 387 –402.
+Schweter, S., & Akbik, A. (2020). Flert: Document-level features for named entity recognition. arXiv
+preprint arXiv:2011.06993.
+Sejnowski, T. J. (2020). The unreasonable effectiveness of deep learning in arti ﬁcial intelligence.
+Proceedings of the National Academy of Sciences ,117(48), 30033 –30038.
+Shahzad, M., Amin, A., Esteves, D., & Ngomo, A. C. N. (2021, April). InferNER: An attentive model
+leveraging the sentence-level information for named entity recognition in microblogs. In The
+international FLAIRS conference proceedings (Vol. 34).
+Sheng, E., Chang, K. W., Natarajan, P., & Peng, N. (2019). The woman worked as a babysitter: On
+biases in language generation. arXiv preprint arXiv:1909.01326.
+Simonov, A., & Rao, J. (2022). Demand for online news under government control: Evidence from
+Russia. Journal of Political Economy ,130(2), 259 –309.
+Stone, P. J. (1966). The general inquirer: A computer approach to content analysis . Cambridge, MA:
+MIT Press.
+Sun, Y., Wang, S., Feng, S., Ding, S., Pang, C., Shang, J., ...Wang, H. (2021). Ernie 3.0: Large-scale
+knowledge enhanced pre-training for language understanding and generation. arXiv preprintarXiv:2107.02137.214 JOCHEN HARTMANN AND ODED NETZERTang, T., Fang, E., & Wang, F. (2014). Is neutral really neutral? The effects of neutral user-generated
+content on product sales. Journal of Marketing ,78(4), 41 –58.
+Timoshenko, A., & Hauser, J. R. (2019). Identifying customer needs from user-generated content.
+Marketing Science ,38(1), 1 –20.
+Tirunillai, S., & Tellis, G. J. (2012). Does chatter really matter? Dynamics of user-generated content
+and stock performance. Marketing Science ,31(2), 198 –215.
+Tirunillai, S., & Tellis, G. J. (2014). Mining marketing meaning from online chatter: Strategic brand
+analysis of big data using latent Dirichlet allocation. Journal of Marketing Research ,51(4),
+463 –479.
+Toubia, O., Berger, J., & Eliashberg, J. (2021). How quantifying the shape of stories predicts their
+success. Proceedings of the National Academy of Sciences ,118(26).
+Toubia, O., Iyengar, G., Bunnell, R., & Lemaire, A. (2019). Extracting features of entertainment
+products: A guided latent Dirichlet allocation approach informed by the psychology of mediaconsumption. Journal of Marketing Research ,56(1), 18 –36.
+Toubia, O., & Netzer, O. (2017). Idea generation, creativity, and prototypicality. Marketing Science ,
+36(1), 1 –20.
+Tunstall, L., Reimers, N., Jo, U. E. S., Bates, L., Korat, D., Wasserblat, M., & Pereg, O. (2022).
+Efﬁcient few-shot learning without prompts. arXiv preprint arXiv:2209.11055.
+Tunstall, L., von Werra, L., & Wolf, T. (2022). Natural language processing with transformers .
+Sebastopol, CA: O ’Reilly Media, Inc.
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ...Polosukhin, I.
+(2017). Attention is all you need. Advances in Neural Information Processing Systems ,30.
+Veitch, V., Sridhar, D., & Blei, D. (2020, August). Adapting text embeddings for causal inference. In
+Conference on uncertainty in arti ﬁcial intelligence (pp. 919 –928). PMLR.
+Villarroel Ordenes, F., Grewal, D., Ludwig, S., Ruyter, K. D., Mahr, D., & Wetzels, M. (2019).
+Cutting through content clutter: How speech and image acts drive consumer sharing of socialmedia brand messages. Journal of Consumer Research ,45(5), 988 –1012.
+Wang, B., & Komatsuzaki, A. (2021). GPT-J-6B: A 6 Billion Parameter Autoregressive Language
+Model. Retrieved from https://github.com/kingo ﬂolz/mesh-transformer-jax
+Wang, Y., Qin, M. S., Luo, X., & Kou, Y. (2022). How support for Black Lives Matter impacts
+consumer responses on social media. Marketing Science . In Press. doi:10.1287/mksc.2022.1372
+Woolley, K., & Sharif, M. A. (2021). Incentives increase relative positivity of review content and
+enjoyment of review writing. Journal of Marketing Research ,58(3), 539
+–558.
+Yang, S., Santillana, M., & Kou, S. C. (2015). Accurate estimation of in ﬂuenza epidemics using
+Google search data via ARGO. Proceedings of the National Academy of Sciences ,112(47),
+14473 –14478.
+Yang, Y., Zhang, K., & Fan, Y. (2022). sDTM: A supervised Bayesian deep topic model for text
+analytics. Information Systems Research . In Press. doi:10.1287/isre.2022.1124
+Yin, W., Hay, J., & Roth, D. (2019). Benchmarking zero-shot text classi ﬁcation: Datasets, evaluation
+and entailment approach. arXiv preprint arXiv:1909.00161.
+Zhang, S., Roller, S., Goyal, N., Artetxe, M., Chen, M., Chen, S., ...Zettlemoyer, L. (2022). OPT:
+Open pre-trained transformer language models. arXiv preprint arXiv:2205.01068.
+Zhao, J., Wang, T., Yatskar, M., Ordonez, V., & Chang, K. W. (2017). Men also like shopping:
+Reducing gender bias ampli ﬁcation using corpus-level constraints. arXiv preprint arXiv:1707.
+09457.
+Zoph, B., Bello, I., Kumar, S., Du, N., Huang, Y., Dean, J., ...Fedus, W. (2022). Designing effective
+sparse expert models. arXiv preprint arXiv:2202.08906.Natural Language Processing in Marketing 215
+INFO:root:--------------------
+INFO:root:scholarAgentWithSearch is thinking...
+INFO:root:Done
+INFO:root:[blue]scholarAgentWithSearch: 
+INFO:root:The paper titled "Natural Language Processing in Marketing" by Jochen Hartmann and Oded Netzer discusses the growing significance of text data in marketing and the application of Natural Language Processing (NLP) techniques to extract meaningful insights from this unstructured data. The authors highlight various marketing applications, such as analyzing consumer reviews, optimizing SEO content, and understanding investor sentiments through press releases.
+
+Key points from the paper include:
+
+1. **NLP Methods**: The authors review established NLP methods for traditional tasks like topic modeling (e.g., Latent Dirichlet Allocation) and sentiment analysis, while also exploring emerging techniques such as embedding-based approaches and pretrained language models.
+
+2. **Future of NLP in Marketing**: The paper emphasizes the potential of new NLP methods to enhance existing tasks and enable novel applications, including automated text generation and multimodal representation learning.
+
+3. **Dual Role of Language**: The authors discuss how text can serve as both an independent variable (predicting outcomes) and a dependent variable (extracting outcomes) in marketing research.
+
+4. **Causality**: The paper addresses the importance of establishing causal relationships using NLP methods, suggesting that advancements in NLP can facilitate causal inference in marketing studies.
+
+5. **Research Agenda**: The authors propose a roadmap for future research in NLP applications within marketing, encouraging scholars to explore the rich opportunities presented by these technologies.
+
+6. **Code Examples**: The paper provides supplementary code examples to assist researchers in applying NLP techniques in their marketing studies.
+
+In conclusion, the authors assert that NLP is a vital tool in marketing research, with the potential to unlock new insights and improve decision-making processes in various marketing contexts.
+INFO:root:Done
+INFO:root:[green]User: 
+INFO:root:
+[red]Bye!
